@@ -5,6 +5,30 @@ using System.Text;
 
 namespace PushSharp.Android
 {
+	public class GcmNotificationKeyCreateException : Exception
+	{
+		public GcmNotificationKeyCreateException(string msg)
+			: base(msg)
+		{
+		}
+	}
+
+	public class GcmNotificationKeyAddRegistrationIdsException : Exception
+	{
+		public GcmNotificationKeyAddRegistrationIdsException(string msg)
+			: base(msg)
+		{
+		}
+	}
+
+	public class GcmNotificationKeyRemoveRegistrationIdsException : Exception
+	{
+		public GcmNotificationKeyRemoveRegistrationIdsException(string msg)
+			: base(msg)
+		{
+		}
+	}
+
 	public class GcmMessageTransportException : Exception
 	{
 		public GcmMessageTransportException(string message, GcmMessageTransportResponse response)
