@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,7 +42,8 @@ namespace PushSharp.Android
 		}
 		
 		public void SendNotification(INotification notification, SendNotificationCallbackDelegate callback)
-		{
+		{           
+
 			var msg = notification as GcmNotification;
 
 			var result = new GcmMessageTransportResponse();
@@ -57,7 +58,21 @@ namespace PushSharp.Android
 			//webReq.ContentType = "application/x-www-form-urlencoded;charset=UTF-8   can be used for plaintext bodies
 			webReq.UserAgent = "PushSharp (version: " + assemblyVerison.ToString () + ")";
 			webReq.Headers.Add("Authorization: key=" + gcmSettings.SenderAuthToken);
-
+            /////add proxy part
+            if (this.gcmSettings.proxyInformation.isProxyEnable)
+            {
+                if (!string.IsNullOrEmpty(this.gcmSettings.proxyInformation.ProxyUrl) && (this.gcmSettings.proxyInformation != null))
+                {
+                    WebProxy myProxy = new WebProxy();
+                    Uri newUri = new Uri(this.gcmSettings.proxyInformation.ProxyUrl);
+                    myProxy.Address = newUri;
+                    if ((!string.IsNullOrEmpty(this.gcmSettings.proxyInformation.ProxyUser)) && (!string.IsNullOrEmpty(this.gcmSettings.proxyInformation.ProxyPassword)))
+                    {                       
+                        myProxy.Credentials = new NetworkCredential(this.gcmSettings.proxyInformation.ProxyUser, this.gcmSettings.proxyInformation.ProxyPassword, this.gcmSettings.proxyInformation.DomainName);
+                        webReq.Proxy = myProxy;
+                    }
+                }
+            }
 			webReq.BeginGetRequestStream(new AsyncCallback(requestStreamCallback), new GcmAsyncParameters()
 			{
 				Callback = callback,
